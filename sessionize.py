@@ -2,6 +2,7 @@ import dateparser
 import requests
 from bs4 import BeautifulSoup
 
+import twitter_utils
 
 def get(url):
     res = requests.get(url)
@@ -16,6 +17,15 @@ def find_navy_section(root, label):
 
 def parse_event(url):
     root = get(url)
+
+    if root.find('span', string='Speaker Profile'):
+        return None
+
+    if 'Log in' in root.find('title').string:
+        return None
+
+    if '@ Sessionize.com' not in root.find('title').string:
+        return None
 
     data = {
         'Conference Name': root.select('.ibox-title h4')[0].string,
@@ -66,6 +76,26 @@ def parse_event(url):
 
     return data
 
+
+def find_events():
+    seen_urls = set()
+    for url in twitter_utils.search_for_url('sessionize.com'):
+        # Skip the queryparams and downcase it.
+        clean_url = url.split('?')[0].lower().rstrip('/')
+        if clean_url in seen_urls:
+            continue
+        if '/api/' in clean_url:
+            continue
+        evt = parse_event(clean_url)
+        if evt is not None:
+            yield evt
+        seen_urls.add(clean_url)
+
+
+def scrape():
+    yield from find_events()
+
+
 if __name__ == '__main__':
-    print(parse_event('https://sessionize.com/mixit19'))
-    print(parse_event('https://sessionize.com/blockchain-saturday-Utah-v2'))
+    for d in find_events():
+        print(d)

@@ -4,12 +4,15 @@ from datetime import date, datetime
 import devopsdays
 import papercall
 import models
+import sessionize
 
 def scrape_all():
     print('Scraping Papercall')
     yield from papercall.scrape()
     print('Scraping Devopsdays')
     yield from devopsdays.scrape()
+    print('Scraping Sessionize')
+    yield from sessionize.scrape()
 
 
 def sync_record(existing, fields):
@@ -20,11 +23,11 @@ def sync_record(existing, fields):
         elif isinstance(value, date):
             fields[key] = value.isoformat()
     if not fields.get('Conference Start Date'):
-        fields.pop('Conference Start Date')
+        fields.pop('Conference Start Date', None)
     if not fields.get('Conference End Date'):
-        fields.pop('Conference End Date')
+        fields.pop('Conference End Date', None)
     if not fields.get('Tags'):
-        fields.pop('Tags')
+        fields.pop('Tags', None)
 
     # No existing verison, create it.
     if existing is None:
