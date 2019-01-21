@@ -5,6 +5,7 @@ import devopsdays
 import papercall
 import models
 import sessionize
+import linux_foundation
 
 def scrape_all():
     print('Scraping Papercall')
@@ -13,6 +14,8 @@ def scrape_all():
     yield from devopsdays.scrape()
     print('Scraping Sessionize')
     yield from sessionize.scrape()
+    print('Scraping Linux Foundation')
+    yield from linux_foundation.scrape()
 
 
 def sync_record(existing, fields):
@@ -34,6 +37,7 @@ def sync_record(existing, fields):
         conf = models.Conference(**fields)
         print(f'Creating {conf}')
         conf.save()
+        return conf
     else:
         # Check if a save is needed.
         do_update = False
@@ -60,6 +64,7 @@ def sync_record(existing, fields):
             print(f'Updating {existing}')
             existing.update(fields)
             existing.save()
+        return existing
 
 
 def sync_all():
@@ -70,7 +75,8 @@ def sync_all():
 
     # Run the scrapes and syncs.
     for fields in scrape_all():
-        sync_record(conferences.get(fields['CFP URL']), fields)
+        conf = sync_record(conferences.get(fields['CFP URL']), fields)
+        conferences[conf['CFP URL']] = conf
 
 
 def main():
