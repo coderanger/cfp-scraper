@@ -75,6 +75,9 @@ def sync_all():
 
     # Run the scrapes and syncs.
     for fields in scrape_all():
+        if 'meetup' in fields.get('Conference Name', '').lower() or 'meetup' in fields.get('Conference URL', '').lower():
+            continue
+
         conf = sync_record(conferences.get(fields['CFP URL']), fields)
         conferences[conf['CFP URL']] = conf
 
