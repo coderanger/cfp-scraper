@@ -18,7 +18,7 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
@@ -30,7 +30,7 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
-          name: run sync
+          name: Run sync
           command: |
             . venv/bin/activate
             python main.py
@@ -42,7 +42,7 @@ workflows:
       - sync
     triggers:
       - schedule:
-          cron: "15 1 * * *"
+          cron: "0 10 * * *"
           filters:
             branches:
               only:
