@@ -6,6 +6,7 @@ import papercall
 import models
 import sessionize
 import linux_foundation
+import seecfp
 
 def scrape_all():
     print('Scraping Papercall')
@@ -16,6 +17,8 @@ def scrape_all():
     yield from sessionize.scrape()
     print('Scraping Linux Foundation')
     yield from linux_foundation.scrape()
+    print('Scraping SeeCFP')
+    yield from seecfp.scrape()
 
 
 def sync_record(existing, fields):
@@ -57,7 +60,7 @@ def sync_record(existing, fields):
                 continue
 
             if value != existing_value:
-                print('{} {} {}'.format(key, repr(value), repr(existing_value)))
+                print('Field changed {}: was {} now {}'.format(key, repr(existing_value), repr(value)))
                 do_update = True
                 break
         if do_update:
