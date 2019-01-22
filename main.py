@@ -1,5 +1,5 @@
 import itertools
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import devopsdays
 import papercall
@@ -78,7 +78,10 @@ def sync_all():
 
     # Run the scrapes and syncs.
     for fields in scrape_all():
+        # Try to filter out meetups
         if 'meetup' in fields.get('Conference Name', '').lower() or 'meetup' in fields.get('Conference URL', '').lower():
+            continue
+        if fields.get('Conference Start Date') and fields.get('Conference End Date') and fields['Conference End Date'] - fields['Conference Start Date'] > timedelta(days=14):
             continue
 
         conf = sync_record(conferences.get(fields['CFP URL']), fields)
