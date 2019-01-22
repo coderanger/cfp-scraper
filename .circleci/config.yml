@@ -42,7 +42,7 @@ workflows:
       - sync
     triggers:
       - schedule:
-          cron: "0 10 * * *"
+          cron: "15 1 * * *"
           filters:
             branches:
               only:
