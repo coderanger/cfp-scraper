@@ -56,6 +56,9 @@ class Conference(AirtableModel):
         # If we didn't have a CFP Start Date, just assume it's today.
         self.setdefault('CFP Start Date', str(datetime.utcnow().date()))
 
+        # Clear computed fields.
+        end_date_only = self.pop('CFP End Date (Only)')
+
         # Handle the tags value.
         tags = self.pop('Tags', [])
         try:
@@ -63,6 +66,7 @@ class Conference(AirtableModel):
         finally:
             # Restore it after the save
             self['Tags'] = tags
+            self['CFP End Date (Only)'] = end_date_only
         # Update any new tags.
         for t in tags:
             tag = Tag.fetch(Tag=t)
