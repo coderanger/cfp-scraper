@@ -7,6 +7,7 @@ import models
 import sessionize
 import linux_foundation
 import seecfp
+import lwn
 
 def scrape_all():
     print('Scraping Papercall')
@@ -19,6 +20,8 @@ def scrape_all():
     yield from linux_foundation.scrape()
     print('Scraping SeeCFP')
     yield from seecfp.scrape()
+    print('Scraping LWN CFP Calendar')
+    yield from lwn.scrape()
 
 
 def sync_record(existing, fields):
