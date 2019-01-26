@@ -57,7 +57,7 @@ class Conference(AirtableModel):
         self.setdefault('CFP Start Date', str(datetime.utcnow().date()))
 
         # Clear computed fields.
-        end_date_only = self.pop('CFP End Date (Only)')
+        end_date_only = self.pop('CFP End Date (Only)', None)
 
         # Handle the tags value.
         tags = self.pop('Tags', [])
