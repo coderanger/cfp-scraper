@@ -48,7 +48,8 @@ def parse_events_page():
 def fetch_smapply_json():
     has_next = True
     page = 1
-    while has_next:
+    # Ten page limit to deal with errors I guess?
+    while has_next and page < 10:
         data = requests.get(f'https://linuxfoundation.smapply.io/prog/ds/?page={page}&base_query=all').json()
         has_next = data['has_next']
         page += 1
