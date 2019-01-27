@@ -1,4 +1,5 @@
 import itertools
+import os
 from datetime import date, datetime, timedelta
 
 import devopsdays
@@ -73,6 +74,8 @@ def sync_record(existing, fields):
             print(f'Updating {existing}')
             existing.update(fields)
             existing.save()
+        elif os.environ.get('CI'):
+            print(f'Scraped {existing}')
         return existing
 
 
