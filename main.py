@@ -8,6 +8,7 @@ import sessionize
 import linux_foundation
 import seecfp
 import lwn
+import mozilla_calendar
 
 def scrape_all():
     print('Scraping Papercall')
@@ -22,6 +23,8 @@ def scrape_all():
     yield from seecfp.scrape()
     print('Scraping LWN CFP Calendar')
     yield from lwn.scrape()
+    print('Scraping Mozilla Calendar')
+    yield from mozilla_calendar.scrape()
 
 
 def sync_record(existing, fields):

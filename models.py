@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 import airtable
+import dateparser
 
 
 class AirtableModel(dict):
@@ -43,6 +44,14 @@ class AirtableModel(dict):
             self.airtable_id = record['id']
 
 
+def datetime_lt(a, b):
+    if isinstance(a, (str, bytes)):
+        a = dateparser.parse(a)
+    if isinstance(b, (str, bytes)):
+        b = dateparser.parse(b)
+    return a.replace(tzinfo=None) < b.replace(tzinfo=None)
+
+
 class Conference(AirtableModel):
     table_name = 'Conferences'
 
@@ -54,7 +63,14 @@ class Conference(AirtableModel):
 
     def save(self):
         # If we didn't have a CFP Start Date, just assume it's today.
-        self.setdefault('CFP Start Date', str(datetime.utcnow().date()))
+        if 'CFP Start Date' not in self:
+            if 'CFP End Date' in self and datetime_lt(self['CFP End Date'], datetime.now()):
+                d = self['CFP End Date']
+                if isinstance(d, (str, bytes)):
+                    d = str(dateparser.parse(d).date())
+                self['CFP Start Date'] = d
+            else:
+                self['CFP Start Date'] = str(datetime.utcnow().date())
 
         # Clear computed fields.
         end_date_only = self.pop('CFP End Date (Only)', None)
