@@ -40,10 +40,10 @@ workflows:
   sync:
     jobs:
       - sync
-    # triggers:
-    #   - schedule:
-    #       cron: "0 10 * * *"
-    #       filters:
-    #         branches:
-    #           only:
-    #             - master
+    triggers:
+      - schedule:
+          cron: "0 10 * * *"
+          filters:
+            branches:
+              only:
+                - master
