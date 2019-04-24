@@ -58,6 +58,9 @@ def fetch_smapply_json():
 
 def parse_smapply_json():
     for data in fetch_smapply_json():
+        if not data['startdate']:
+            # Malformed data.
+            continue
         yield {
             'Conference Name': data['name'],
             'CFP Start Date': dateparser.parse(data['startdate']).astimezone(pytz.utc).date(),

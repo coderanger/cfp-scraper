@@ -66,7 +66,10 @@ def parse_event(url):
         else:
             raise ValueError(f'Unable to find end date in {url}')
 
-    name_parts = root.select('.welcome-page')[0].string.split()
+    name_elm = root.select('.welcome-page')
+    if not name_elm:
+        name_elm = root.select('title')
+    name_parts = name_elm[0].string.split()
     name_parts[0] = name_parts[0].capitalize()
     name = ' '.join(name_parts)
 
