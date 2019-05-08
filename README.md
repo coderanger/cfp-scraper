@@ -10,6 +10,7 @@ Things you'll need:
 
 1. [Airtable](https://airtable.com/) account
 2. Twitter account 
+3. Python 3 + virtualenv
 
 ### Pre-reqs 
 
@@ -35,15 +36,15 @@ The easiest way to run this is in isolation, using virtualenv.
 
 2. Create virtualenv
 
-      cd cfp-scraper
-      virtualenv --python=python3 .
-      source ./bin/activate.fish
+        cd cfp-scraper
+        virtualenv --python=python3 .
+        source ./bin/activate.fish
 
     (Use the `activate` script appropriate for your shell)
 
 3. Install required modules
 
-      pip install -r requirements.txt
+        pip install -r requirements.txt
 
 ### Run cfp-scraper
 
@@ -68,4 +69,3 @@ The easiest way to run this is in isolation, using virtualenv.
 * Launch: 
 
         python main.py
-        
