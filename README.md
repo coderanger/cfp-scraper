@@ -56,7 +56,6 @@ The easiest way to run this is in isolation, using virtualenv.
 
 * Based on the credentials obtained above, run: 
 
-        ```
         export TWITTER_CONSUMER_KEY=xxxxxx
         export TWITTER_CONSUMER_SECRET=xxxxxx
         export TWITTER_ACCESS_KEY=xxxxxx
@@ -64,7 +63,6 @@ The easiest way to run this is in isolation, using virtualenv.
 
         export AIRTABLE_API_KEY=xxxxxx
         export AIRTABLE_BASE_KEY=xxxxxx
-        ```
 
 * Launch: 
 
