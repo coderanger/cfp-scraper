@@ -94,14 +94,20 @@ def parse_page(root):
             url = event.select('.fa-external-link')[0]['title']
         except IndexError:
             url = ''
+        cfp_close_label = event.find(lambda elm: elm.name == 'strong' and 'CFP closes at' in elm.string)
+        if not cfp_close_label:
+            # No real point.
+            continue
+        cfp_close = dateparser.parse(cfp_close_label.parent.find_next_sibling('td').string.strip())
         start_date = end_date = None
-        dates = event.find('strong').next_sibling.string.strip()
-        if dates.strip():
+        dates = event.find(lambda elm: elm.name == 'strong' and 'Event Dates' in elm.string)
+        if dates:
+            dates = dates.next_sibling.string.strip()
+        if dates:
             parsed_dates = [d for _, d in dateparser.search.search_dates(dates)]
             if parsed_dates:
                 start_date = parsed_dates[0].date()
                 end_date = parsed_dates[-1].date()
-        cfp_close = event.select('tbody td')[1].string
         tags = [t.string for t in event.select('a[href^="/events?keywords=tags"]')]
         yield {
             'CFP URL': title_line['href'],
@@ -110,7 +116,7 @@ def parse_page(root):
             'Conference URL': url,
             'Conference Start Date': start_date,
             'Conference End Date': end_date,
-            'CFP End Date': dateparser.parse(cfp_close),
+            'CFP End Date': cfp_close,
             'Tags': tags,
         }
 
@@ -134,3 +140,9 @@ def format_all(out):
 
 def scrape():
     yield from parse_all()
+
+
+if __name__ == '__main__':
+    import pprint
+    for event in parse_all():
+        pprint.pprint(event)

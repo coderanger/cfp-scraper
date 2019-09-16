@@ -64,7 +64,7 @@ class Conference(AirtableModel):
     def save(self):
         # If we didn't have a CFP Start Date, just assume it's today.
         if 'CFP Start Date' not in self:
-            if 'CFP End Date' in self and datetime_lt(self['CFP End Date'], datetime.now()):
+            if self.get('CFP End Date') and datetime_lt(self['CFP End Date'], datetime.now()):
                 d = self['CFP End Date']
                 if isinstance(d, (str, bytes)):
                     d = str(dateparser.parse(d).date())
@@ -95,8 +95,9 @@ class Conference(AirtableModel):
         for t in self.db.get(self.airtable_id)['fields'].get('Tags', []):
             if t not in tags:
                 tag = Tag.fetch(Tag=t)
-                tag['Conferences'].delete(self.airtable_id)
-                tag.save()
+                if tag.get('Conferences'):
+                    tag['Conferences'].delete(self.airtable_id)
+                    tag.save()
 
 
 class Tag(AirtableModel):

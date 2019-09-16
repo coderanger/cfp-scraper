@@ -1,5 +1,6 @@
 import itertools
 import os
+import pytz
 from datetime import date, datetime, timedelta
 
 import devopsdays
@@ -32,7 +33,9 @@ def sync_record(existing, fields):
     # Convert any needed fields:
     for key, value in fields.items():
         if isinstance(value, datetime):
-            fields[key] = value.replace(microsecond=0, tzinfo=None).isoformat() + '.000Z'
+            if value.tzinfo:
+                value = pytz.UTC.normalize(value).replace(tzinfo=None)
+            fields[key] = value.replace(microsecond=0).isoformat() + '.000Z'
         elif isinstance(value, date):
             fields[key] = value.isoformat()
     if not fields.get('Conference Start Date'):
