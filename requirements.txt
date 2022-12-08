@@ -1,6 +1,6 @@
 airtable-python-wrapper==0.11.3.post1
 beautifulsoup4==4.7.1
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 dateparser==0.7.0
 idna==2.8
